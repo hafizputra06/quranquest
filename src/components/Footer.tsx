@@ -23,7 +23,7 @@ export default function Footer() {
                             QuranQuest
                         </span>
                         <p className="text-gray-400 text-sm font-medium">
-                            © 2026 by <span className="text-gray-600 font-bold">Hafiz Rahadian Putra</span>
+                            © 2026 by <a href="https://hafizportfolio-eta.vercel.app/" target="_blank" rel="noopener noreferrer"><span className="text-gray-600 font-bold">Hafiz Rahadian Putra</span></a>
                         </p>
                     </div>
 

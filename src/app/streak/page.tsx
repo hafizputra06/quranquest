@@ -1,7 +1,7 @@
 'use client';
 
 import Header from '@/components/Header';
-import { getDailyReads, getStats } from '@/lib/storage';
+import { getDailyReads, getStats, getTodayStatus } from '@/lib/storage';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { useEffect, useState } from 'react';
 
@@ -68,6 +68,7 @@ export default function StreakPage() {
     const [weeks, setWeeks] = useState<DayCell[][]>([]);
     const [stats, setStats] = useState({ totalSuratDibaca: 0, totalHariAktif: 0, streak: 0 });
     const [totalReadDays, setTotalReadDays] = useState(0);
+    const [todayStatus, setTodayStatus] = useState<'done' | 'pending'>('pending');
     const [jakartaTime, setJakartaTime] = useState<Date | null>(null);
 
     useEffect(() => {
@@ -77,6 +78,7 @@ export default function StreakPage() {
         setWeeks(calendar);
         setStats(s);
         setTotalReadDays(Object.values(reads).filter((r: any) => r.status === 'done').length);
+        setTodayStatus(getTodayStatus());
 
         // Live Jakarta clock
         const tick = () => setJakartaTime(getJakartaNow());
@@ -179,14 +181,14 @@ export default function StreakPage() {
                                                     key={di}
                                                     title={`${cell.date}${cell.isRead ? ' ✅ Sudah baca' : cell.isToday ? ' ← Hari ini' : ''}`}
                                                     className={`w-[28px] h-[28px] rounded-md transition-all duration-200 cursor-default flex items-center justify-center ${cell.isFuture
-                                                            ? 'bg-gray-50 border border-dashed border-gray-200'
-                                                            : cell.isRead
-                                                                ? cell.isToday
-                                                                    ? 'bg-emerald-500 ring-2 ring-emerald-300 shadow-md'
-                                                                    : 'bg-emerald-400 hover:bg-emerald-500'
-                                                                : cell.isToday
-                                                                    ? 'bg-white border-2 border-emerald-400'
-                                                                    : 'bg-gray-100 hover:bg-gray-200'
+                                                        ? 'bg-gray-50 border border-dashed border-gray-200'
+                                                        : cell.isRead
+                                                            ? cell.isToday
+                                                                ? 'bg-emerald-500 ring-2 ring-emerald-300 shadow-md'
+                                                                : 'bg-emerald-400 hover:bg-emerald-500'
+                                                            : cell.isToday
+                                                                ? 'bg-white border-2 border-emerald-400'
+                                                                : 'bg-gray-100 hover:bg-gray-200'
                                                         }`}
                                                 >
                                                     {cell.isToday && !cell.isRead && (
@@ -225,11 +227,11 @@ export default function StreakPage() {
 
                 {/* Motivational message */}
                 <FadeIn delay={0.3}>
-                    <div className={`rounded-2xl p-6 text-center ${stats.streak > 0
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
-                            : 'bg-white border border-gray-100 shadow-sm'
+                    <div className={`rounded-2xl p-6 text-center shadow-lg transition-all ${todayStatus === 'done'
+                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                        : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-orange-100'
                         }`}>
-                        {stats.streak > 0 ? (
+                        {todayStatus === 'done' ? (
                             <>
                                 <div className="text-3xl mb-2">🔥</div>
                                 <p className="font-bold text-lg mb-1">MasyaAllah! {stats.streak} hari berturut-turut!</p>
@@ -238,8 +240,8 @@ export default function StreakPage() {
                         ) : (
                             <>
                                 <div className="text-3xl mb-2">✨</div>
-                                <p className="font-bold text-lg text-gray-800 mb-1">Mulai Streak Harimu!</p>
-                                <p className="text-gray-500 text-sm">Baca satu surat hari ini dan tandai selesai</p>
+                                <p className="font-bold text-lg mb-1">Mulai Streak Harimu!</p>
+                                <p className="text-amber-50 text-sm">Baca satu surat hari ini dan tandai selesai</p>
                             </>
                         )}
                     </div>
