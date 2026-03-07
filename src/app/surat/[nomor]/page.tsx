@@ -23,7 +23,7 @@ export default function SurahDetailPage({ params }: PageProps) {
       const { nomor } = await params;
       const num = parseInt(nomor, 10);
       setSurahNumber(num);
-      
+
       if (isNaN(num) || num < 1 || num > 114) {
         setLoading(false);
         return;
@@ -31,7 +31,7 @@ export default function SurahDetailPage({ params }: PageProps) {
 
       const data = await getSurah(num);
       setSurahData(data);
-      
+
       const lastRead = getLastRead();
       if (lastRead && lastRead.surat === num) {
         setLastReadAyat(lastRead.ayat);
@@ -89,25 +89,24 @@ export default function SurahDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl p-6 mb-6 border border-emerald-100">
           <div className="flex items-center justify-between mb-4">
-            <Link 
+            <Link
               href="/surat"
               className="text-emerald-600 hover:text-emerald-700 text-sm font-medium"
             >
               ← Kembali ke daftar
             </Link>
-            <span className={`text-xs px-3 py-1 rounded-full ${
-              surah.revelationType === 'Makkiyah' 
-                ? 'bg-purple-100 text-purple-700' 
+            <span className={`text-xs px-3 py-1 rounded-full ${surah.revelationType === 'Makkiyah'
+                ? 'bg-purple-100 text-purple-700'
                 : 'bg-blue-100 text-blue-700'
-            }`}>
+              }`}>
               {surah.revelationType}
             </span>
           </div>
-          
+
           <h1 className="font-arabic text-5xl md:text-6xl text-gray-900 mb-2 text-center" dir="rtl">
             {surah.name}
           </h1>
@@ -128,6 +127,7 @@ export default function SurahDetailPage({ params }: PageProps) {
               key={ayat.number}
               number={ayat.number}
               arab={ayat.text}
+              transliteration={ayat.transliteration}
               translation={ayat.translation}
               numberInSurah={ayat.numberInSurah}
               surahNumber={surahNumber}
@@ -139,7 +139,7 @@ export default function SurahDetailPage({ params }: PageProps) {
 
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
           {hasPrev ? (
-            <Link 
+            <Link
               href={`/surat/${surahNumber - 1}`}
               className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
             >
@@ -151,9 +151,9 @@ export default function SurahDetailPage({ params }: PageProps) {
           ) : (
             <div />
           )}
-          
+
           {hasNext && (
-            <Link 
+            <Link
               href={`/surat/${surahNumber + 1}`}
               className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium"
             >

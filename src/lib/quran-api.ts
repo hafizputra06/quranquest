@@ -1,5 +1,6 @@
 import quranData from '@/data/quran.json';
 import quranIdData from '@/data/quran_id.json';
+import transliterationData from '@/data/transliteration_cleaned.json';
 
 export interface QuranSurah {
   number: number;
@@ -16,6 +17,7 @@ export interface QuranAyah {
   numberInSurah: number;
   jazm: string;
   translation: string;
+  transliteration?: string;
 }
 
 export interface SurahData {
@@ -51,16 +53,23 @@ export async function getSurah(surahNumber: number): Promise<SurahData | null> {
   try {
     const surahData = quranData[surahNumber - 1] as SurahJson | undefined;
     const surahId = quranIdData[surahNumber - 1] as SurahJson | undefined;
-    
+
     if (!surahData) return null;
 
-    const ayahs = surahData.verses.map((verse, index) => ({
-      number: verse.id,
-      text: verse.text,
-      numberInSurah: verse.id,
-      jazm: '',
-      translation: surahId?.verses[index]?.translation || '',
-    }));
+    const translitRecord = transliterationData as Record<string, string[]>;
+    const transliterationList = translitRecord[surahNumber.toString()];
+
+    const ayahs = surahData.verses.map((verse, index) => {
+      let transliteration = transliterationList ? transliterationList[index] : '';
+      return {
+        number: verse.id,
+        text: verse.text,
+        numberInSurah: verse.id,
+        jazm: '',
+        translation: surahId?.verses[index]?.translation || '',
+        transliteration,
+      };
+    });
 
     return {
       surah: {
@@ -82,7 +91,7 @@ export async function getSurah(surahNumber: number): Promise<SurahData | null> {
 export async function getRandomAyat(): Promise<{ arab: string; translation: string; surah: string; surahTranslation: string; ayat: number }> {
   const randomSurah = Math.floor(Math.random() * 114) + 1;
   const surahData = await getSurah(randomSurah);
-  
+
   if (!surahData || surahData.ayahs.length === 0) {
     return {
       arab: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',

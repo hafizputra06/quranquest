@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 interface AyatCardProps {
   number: number;
   arab: string;
+  transliteration?: string;
   translation: string;
   numberInSurah: number;
   surahNumber: number;
@@ -12,7 +13,7 @@ interface AyatCardProps {
   onMarkPosition: (surah: number, ayat: number) => void;
 }
 
-export default function AyatCard({ number, arab, translation, numberInSurah, surahNumber, lastReadAyat, onMarkPosition }: AyatCardProps) {
+export default function AyatCard({ number, arab, transliteration, translation, numberInSurah, surahNumber, lastReadAyat, onMarkPosition }: AyatCardProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const isLastRead = lastReadAyat === numberInSurah;
@@ -34,13 +35,12 @@ export default function AyatCard({ number, arab, translation, numberInSurah, sur
 
   return (
     <>
-      <div 
+      <div
         id={`ayat-${numberInSurah}`}
-        className={`ayat-card rounded-xl p-6 border mb-4 relative transition-all duration-300 ${
-          isLastRead 
-            ? 'bg-emerald-50 border-emerald-300 shadow-md' 
+        className={`ayat-card rounded-xl p-6 border mb-4 relative transition-all duration-300 ${isLastRead
+            ? 'bg-emerald-50 border-emerald-300 shadow-md'
             : 'bg-white border-gray-100 hover:border-emerald-200'
-        }`}
+          }`}
       >
         {isLastRead && (
           <div className="absolute -left-2 top-1/2 -translate-y-1/2">
@@ -49,14 +49,13 @@ export default function AyatCard({ number, arab, translation, numberInSurah, sur
             </div>
           </div>
         )}
-        
-        <div 
+
+        <div
           className="flex items-start gap-4 cursor-pointer"
           onClick={() => setShowPopup(!showPopup)}
         >
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-            isLastRead ? 'bg-emerald-500' : 'bg-emerald-100'
-          }`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isLastRead ? 'bg-emerald-500' : 'bg-emerald-100'
+            }`}>
             <span className={`font-bold text-sm ${isLastRead ? 'text-white' : 'text-emerald-700'}`}>
               {numberInSurah}
             </span>
@@ -65,6 +64,11 @@ export default function AyatCard({ number, arab, translation, numberInSurah, sur
             <p className="font-arabic text-2xl text-gray-900 text-right leading-loose mb-4" dir="rtl">
               {arab}
             </p>
+            {transliteration && (
+              <p className="text-emerald-600 font-medium italic mb-2">
+                {transliteration}
+              </p>
+            )}
             <p className="text-gray-600 leading-relaxed">{translation}</p>
           </div>
         </div>
@@ -88,7 +92,7 @@ export default function AyatCard({ number, arab, translation, numberInSurah, sur
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
+          <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowModal(false)}
           />
