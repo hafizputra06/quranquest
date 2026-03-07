@@ -9,11 +9,12 @@ interface AyatCardProps {
   translation: string;
   numberInSurah: number;
   surahNumber: number;
+  surahName: string;
   lastReadAyat: number;
   onMarkPosition: (surah: number, ayat: number) => void;
 }
 
-export default function AyatCard({ number, arab, transliteration, translation, numberInSurah, surahNumber, lastReadAyat, onMarkPosition }: AyatCardProps) {
+export default function AyatCard({ number, arab, transliteration, translation, numberInSurah, surahNumber, surahName, lastReadAyat, onMarkPosition }: AyatCardProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const isLastRead = lastReadAyat === numberInSurah;
@@ -107,7 +108,7 @@ export default function AyatCard({ number, arab, transliteration, translation, n
               <p className="text-gray-600 mb-6">
                 Posisi terakhir baca disimpan.<br />
                 <span className="font-medium text-emerald-600">
-                  Surat {surahNumber}, Ayat {numberInSurah}
+                  Surat {surahName}, Ayat {numberInSurah}
                 </span>
               </p>
               <button
