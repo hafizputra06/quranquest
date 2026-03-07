@@ -41,7 +41,7 @@ export async function getSurahList(): Promise<QuranSurah[]> {
       name: surah.name,
       englishName: surah.transliteration,
       englishNameTranslation: idData?.translation || surah.transliteration,
-      revelationType: surah.type === 'meccan' ? 'Mekkah' : 'Madinah',
+      revelationType: surah.type === 'meccan' ? 'Makkiyah' : 'Madaniyah',
       numberOfAyahs: surah.total_verses,
     };
   });
@@ -68,7 +68,7 @@ export async function getSurah(surahNumber: number): Promise<SurahData | null> {
         name: surahData.name,
         englishName: surahData.transliteration,
         englishNameTranslation: surahId?.translation || surahData.transliteration,
-        revelationType: surahData.type === 'meccan' ? 'Meccan' : 'Medinan',
+        revelationType: surahData.type === 'meccan' ? 'Makkiyah' : 'Madaniyah',
         numberOfAyahs: surahData.total_verses,
       },
       ayahs,
@@ -79,7 +79,7 @@ export async function getSurah(surahNumber: number): Promise<SurahData | null> {
   }
 }
 
-export async function getRandomAyat(): Promise<{ arab: string; translation: string; surah: string; ayat: number }> {
+export async function getRandomAyat(): Promise<{ arab: string; translation: string; surah: string; surahTranslation: string; ayat: number }> {
   const randomSurah = Math.floor(Math.random() * 114) + 1;
   const surahData = await getSurah(randomSurah);
   
@@ -88,6 +88,7 @@ export async function getRandomAyat(): Promise<{ arab: string; translation: stri
       arab: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',
       translation: 'Dengan nama Allah Yang Maha Pemurah lagi Maha Penyayang',
       surah: 'Al-Fatihah',
+      surahTranslation: 'Pembukaan',
       ayat: 1,
     };
   }
@@ -98,7 +99,8 @@ export async function getRandomAyat(): Promise<{ arab: string; translation: stri
   return {
     arab: randomAyat.text,
     translation: randomAyat.translation,
-    surah: surahData.surah.englishNameTranslation,
+    surah: surahData.surah.englishName,
+    surahTranslation: surahData.surah.englishNameTranslation,
     ayat: randomAyat.numberInSurah,
   };
 }

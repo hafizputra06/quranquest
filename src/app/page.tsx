@@ -39,7 +39,7 @@ export default async function Home() {
             {ayatHarian.translation}
           </p>
           <p className="text-sm text-gray-500">
-            {ayatHarian.surah} ayat {ayatHarian.ayat}
+            {ayatHarian.surah} ({ayatHarian.surahTranslation}) ayat {ayatHarian.ayat}
           </p>
         </div>
 
