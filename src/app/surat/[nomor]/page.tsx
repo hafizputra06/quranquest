@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header';
 import AyatCard from '@/components/AyatCard';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { getSurah } from '@/lib/quran-api';
 import { setLastRead, markTodayAsRead, getLastRead } from '@/lib/storage';
 import { notFound } from 'next/navigation';
@@ -92,7 +93,7 @@ export default function SurahDetailPage({ params }: PageProps) {
       <Header />
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl p-6 mb-6 border border-emerald-100">
+        <FadeIn className="bg-white rounded-xl p-6 mb-6 border border-emerald-100">
           <div className="flex items-center justify-between mb-4">
             <Link
               href="/surat"
@@ -120,26 +121,27 @@ export default function SurahDetailPage({ params }: PageProps) {
           >
             Tandai Selesai Dibaca
           </button>
-        </div>
+        </FadeIn>
 
-        <div className="space-y-0">
+        <StaggerContainer className="space-y-0">
           {ayahs.map((ayat: any) => (
-            <AyatCard
-              key={ayat.number}
-              number={ayat.number}
-              arab={ayat.text}
-              transliteration={ayat.transliteration}
-              translation={ayat.translation}
-              numberInSurah={ayat.numberInSurah}
-              surahNumber={surahNumber}
-              surahName={surah.englishName}
-              lastReadAyat={lastReadAyat}
-              onMarkPosition={handleMarkPosition}
-            />
+            <StaggerItem key={ayat.number}>
+              <AyatCard
+                number={ayat.number}
+                arab={ayat.text}
+                transliteration={ayat.transliteration}
+                translation={ayat.translation}
+                numberInSurah={ayat.numberInSurah}
+                surahNumber={surahNumber}
+                surahName={surah.englishName}
+                lastReadAyat={lastReadAyat}
+                onMarkPosition={handleMarkPosition}
+              />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+        <FadeIn delay={0.2} className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
           {hasPrev ? (
             <Link
               href={`/surat/${surahNumber - 1}`}
@@ -165,7 +167,7 @@ export default function SurahDetailPage({ params }: PageProps) {
               </svg>
             </Link>
           )}
-        </div>
+        </FadeIn>
       </main>
 
       {showFinishedModal && (

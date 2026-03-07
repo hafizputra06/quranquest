@@ -1,6 +1,7 @@
 'use client';
 
 import Header from '@/components/Header';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { getRandomAyat, getSurahList, getSurah } from '@/lib/quran-api';
 import { getTodayStatus, getLastRead } from '@/lib/storage';
 import Link from 'next/link';
@@ -62,15 +63,19 @@ export default function Home() {
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 animate-fade-in-up">
-            Assalamu&apos;alaikum
-          </h1>
-          <p className="text-gray-600 animate-fade-in-up stagger-1">
-            Mari konsisten membaca Al-Quran setiap hari
-          </p>
+          <FadeIn delay={0}>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Assalamu&apos;alaikum
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <p className="text-gray-600">
+              Mari konsisten membaca Al-Quran setiap hari
+            </p>
+          </FadeIn>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-emerald-100 animate-fade-in-up stagger-2">
+        <FadeIn delay={0.2} className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-emerald-100">
           <div className="flex items-center gap-2 mb-4">
             <span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-3 py-1 rounded-full">
               Ayat Hari Ini
@@ -89,39 +94,43 @@ export default function Home() {
               </p>
             </>
           )}
-        </div>
+        </FadeIn>
 
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <Link href="/surat" className="animate-fade-in-up stagger-3">
-            <div className="bg-emerald-500 hover:bg-emerald-600 rounded-xl p-6 text-white transition-colors cursor-pointer">
-              <div className="flex items-center gap-3 mb-2">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <span className="text-xl font-bold">Mulai Membaca</span>
-              </div>
-              <p className="text-emerald-100 text-sm">Baca Al-Quran dengan terjemahan Indonesia</p>
-            </div>
-          </Link>
-
-          {featuredSurah && (
-            <Link href={`/surat/${featuredSurah.number}`} className="animate-fade-in-up stagger-4">
-              <div className="bg-white rounded-xl p-6 border border-gray-200 hover:border-emerald-300 hover:shadow-lg transition-all cursor-pointer">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-purple-100 text-purple-700 text-xs font-medium px-3 py-1 rounded-full">
-                    Surat Pilihan
-                  </span>
+          <FadeIn delay={0.3}>
+            <Link href="/surat">
+              <div className="bg-emerald-500 hover:bg-emerald-600 rounded-xl p-6 text-white transition-colors cursor-pointer">
+                <div className="flex items-center gap-3 mb-2">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span className="text-xl font-bold">Mulai Membaca</span>
                 </div>
-                <p className="font-arabic text-4xl text-gray-900 mb-2">{featuredSurah.name}</p>
-                <p className="text-gray-600 text-m">{featuredSurah.englishName} ({featuredSurah.englishNameTranslation})</p>
-                <p className="text-gray-400 text-m mt-2">{featuredSurah.numberOfAyahs} ayat</p>
+                <p className="text-emerald-100 text-sm">Baca Al-Quran dengan terjemahan Indonesia</p>
               </div>
             </Link>
+          </FadeIn>
+
+          {featuredSurah && (
+            <FadeIn delay={0.4}>
+              <Link href={`/surat/${featuredSurah.number}`}>
+                <div className="bg-white rounded-xl p-6 border border-gray-200 hover:border-emerald-300 hover:shadow-lg transition-all cursor-pointer">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="bg-purple-100 text-purple-700 text-xs font-medium px-3 py-1 rounded-full">
+                      Surat Pilihan
+                    </span>
+                  </div>
+                  <p className="font-arabic text-4xl text-gray-900 mb-2">{featuredSurah.name}</p>
+                  <p className="text-gray-600 text-m">{featuredSurah.englishName} ({featuredSurah.englishNameTranslation})</p>
+                  <p className="text-gray-400 text-m mt-2">{featuredSurah.numberOfAyahs} ayat</p>
+                </div>
+              </Link>
+            </FadeIn>
           )}
         </div>
 
         {todayStatus === 'done' ? (
-          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white animate-fade-in-up stagger-5">
+          <FadeIn delay={0.5} className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold mb-1">Target Harian</h2>
@@ -133,9 +142,9 @@ export default function Home() {
                 </svg>
               </div>
             </div>
-          </div>
+          </FadeIn>
         ) : (
-          <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white animate-fade-in-up stagger-5">
+          <FadeIn delay={0.5} className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold mb-1">Target Harian</h2>
@@ -147,7 +156,7 @@ export default function Home() {
                 </svg>
               </div>
             </div>
-          </div>
+          </FadeIn>
         )}
       </main>
 

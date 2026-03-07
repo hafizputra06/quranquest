@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header';
 import SurahCard from '@/components/SurahCard';
+import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { getSurahList } from '@/lib/quran-api';
 import { getLastRead } from '@/lib/storage';
 import { useEffect, useState } from 'react';
@@ -24,12 +25,12 @@ export default function SuratPage() {
     const loadData = async () => {
       const list = await getSurahList();
       setSurahList(list);
-      
+
       const lastRead = getLastRead();
       if (lastRead) {
         setLastReadSurat(lastRead.surat);
       }
-      
+
       setLoading(false);
     };
 
@@ -66,27 +67,28 @@ export default function SuratPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
+        <FadeIn className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Daftar Surat</h1>
           <p className="text-gray-600">Pilih surat yang ingin Anda baca</p>
-        </div>
+        </FadeIn>
 
-        <div className="space-y-3">
+        <StaggerContainer className="space-y-3">
           {surahList.map((surah) => (
-            <SurahCard
-              key={surah.number}
-              number={surah.number}
-              name={surah.name}
-              englishName={surah.englishName}
-              englishNameTranslation={surah.englishNameTranslation}
-              revelationType={surah.revelationType}
-              numberOfAyahs={surah.numberOfAyahs}
-              isLastRead={lastReadSurat === surah.number}
-            />
+            <StaggerItem key={surah.number}>
+              <SurahCard
+                number={surah.number}
+                name={surah.name}
+                englishName={surah.englishName}
+                englishNameTranslation={surah.englishNameTranslation}
+                revelationType={surah.revelationType}
+                numberOfAyahs={surah.numberOfAyahs}
+                isLastRead={lastReadSurat === surah.number}
+              />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </main>
     </div>
   );
