@@ -1,16 +1,60 @@
+'use client';
+
 import Header from '@/components/Header';
-import { getRandomAyat, getSurahList } from '@/lib/quran-api';
+import { getRandomAyat, getSurahList, getSurah } from '@/lib/quran-api';
+import { getTodayStatus, getLastRead } from '@/lib/storage';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-export default async function Home() {
-  const [ayatHarian, surahList] = await Promise.all([
-    getRandomAyat(),
-    getSurahList(),
-  ]);
+interface Surah {
+  number: number;
+  name: string;
+  englishName: string;
+  englishNameTranslation: string;
+  revelationType: string;
+  numberOfAyahs: number;
+}
 
-  const today = new Date();
-  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
-  const featuredSurah = surahList[dayOfYear % surahList.length];
+export default function Home() {
+  const [ayatHarian, setAyatHarian] = useState<{ arab: string; translation: string; surah: string; surahTranslation: string; ayat: number } | null>(null);
+  const [featuredSurah, setFeaturedSurah] = useState<Surah | null>(null);
+  const [todayStatus, setTodayStatus] = useState<'done' | 'pending'>('pending');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const [ayat, surahList, status] = await Promise.all([
+        getRandomAyat(),
+        getSurahList(),
+        getTodayStatus(),
+      ]);
+
+      setAyatHarian(ayat);
+      setTodayStatus(status);
+
+      const today = new Date();
+      const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+      setFeaturedSurah(surahList[dayOfYear % surahList.length]);
+
+      setLoading(false);
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+        <Header />
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          <div className="animate-pulse">
+            <div className="h-12 bg-gray-200 rounded w-48 mx-auto mb-8"></div>
+            <div className="h-64 bg-gray-200 rounded-2xl mb-8"></div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
@@ -32,15 +76,19 @@ export default async function Home() {
               Ayat Hari Ini
             </span>
           </div>
-          <p className="font-arabic text-3xl text-gray-900 text-right leading-loose mb-6" dir="rtl">
-            {ayatHarian.arab}
-          </p>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            {ayatHarian.translation}
-          </p>
-          <p className="text-sm text-gray-500">
-            {ayatHarian.surah} ({ayatHarian.surahTranslation}) ayat {ayatHarian.ayat}
-          </p>
+          {ayatHarian && (
+            <>
+              <p className="font-arabic text-3xl text-gray-900 text-right leading-loose mb-6" dir="rtl">
+                {ayatHarian.arab}
+              </p>
+              <p className="text-gray-600 leading-relaxed mb-4">
+                {ayatHarian.translation}
+              </p>
+              <p className="text-sm text-gray-500">
+                {ayatHarian.surah} ({ayatHarian.surahTranslation}) ayat {ayatHarian.ayat}
+              </p>
+            </>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -72,19 +120,35 @@ export default async function Home() {
           )}
         </div>
 
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white animate-fade-in-up stagger-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold mb-1">Target Harian</h2>
-              <p className="text-emerald-100 text-sm">Baca minimal 1 surat setiap hari</p>
-            </div>
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+        {todayStatus === 'done' ? (
+          <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-6 text-white animate-fade-in-up stagger-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold mb-1">Target Harian</h2>
+                <p className="text-emerald-100 text-sm">Alhamdulillah, hari ini sudah baca!</p>
+              </div>
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-emerald-200" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white animate-fade-in-up stagger-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold mb-1">Target Harian</h2>
+                <p className="text-amber-100 text-sm">Baca minimal 1 surat hari ini</p>
+              </div>
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
       <footer className="max-w-4xl mx-auto px-4 py-8 text-center text-gray-500 text-sm">
