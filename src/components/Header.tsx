@@ -23,25 +23,29 @@ export default function Header() {
         <nav className="flex items-center gap-1">
           <Link
             href="/"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive('/') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive('/') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
+              }`}
           >
             Beranda
           </Link>
           <Link
             href="/surat"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive('/surat') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive('/surat') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
+              }`}
           >
             Surat
           </Link>
           <Link
+            href="/streak"
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive('/streak') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+          >
+            Streak
+          </Link>
+          <Link
             href="/profil"
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive('/profil') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isActive('/profil') ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'
+              }`}
           >
             Profil
           </Link>
