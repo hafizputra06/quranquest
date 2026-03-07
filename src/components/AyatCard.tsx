@@ -70,7 +70,18 @@ export default function AyatCard({ number, arab, transliteration, translation, n
                 {transliteration}
               </p>
             )}
-            <p className="text-gray-600 leading-relaxed">{translation}</p>
+            <p className="text-gray-600 leading-relaxed">
+              {translation.split(/(\d+\))/g).map((part, i) => {
+                if (/^\d+\)$/.test(part)) {
+                  return (
+                    <sup key={i} className="text-blue-500 font-bold mx-0.5 text-[0.7em]">
+                      {part}
+                    </sup>
+                  );
+                }
+                return part;
+              })}
+            </p>
           </div>
         </div>
 
