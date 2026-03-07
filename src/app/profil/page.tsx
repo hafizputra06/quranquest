@@ -2,6 +2,7 @@
 
 import Header from '@/components/Header';
 import { getStats, getLastRead, getTodayStatus } from '@/lib/storage';
+import { getSurahList } from '@/lib/quran-api';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
@@ -16,114 +17,10 @@ interface LastRead {
   ayat: number;
 }
 
-const SURAH_NAMES: Record<number, string> = {
-  1: 'Al-Fatihah (Pembukaan)',
-  2: 'Al-Baqarah (Sapi Betina)',
-  3: 'Ali Imran (Keluarga Imran)',
-  4: 'An-Nisa (Wanita)',
-  5: 'Al-Maidah (Jamuan)',
-  6: 'Al-Anam (Binatang Ternak)',
-  7: 'Al-Araf (Tempat-Tempat Tinggi)',
-  8: 'Al-Anfal (Rampasan Perang)',
-  9: 'At-Taubah (Pengampunan)',
-  10: 'Yunus (Nabi Yunus)',
-  11: 'Hud (Nabi Hud)',
-  12: 'Yusuf (Nabi Yusuf)',
-  13: 'Ar-Rad (Petir)',
-  14: 'Ibrahim (Nabi Ibrahim)',
-  15: 'Al-Hijr (Batu Hans)',
-  16: 'An-Nahl (Lebah)',
-  17: 'Al-Isra (Perjalanan Malam)',
-  18: 'Al-Kahf (Gua)',
-  19: 'Maryam (Maryam)',
-  20: 'Ta-Ha (Ta-Ha)',
-  21: 'Al-Anbiya (Nabi-Nabi)',
-  22: 'Al-Hajj (Haji)',
-  23: 'Al-Mu-minun (Orang-Orang Mukmin)',
-  24: 'An-Nur (Cahaya)',
-  25: 'Al-Furqan (Pembeda)',
-  26: 'As-Suara (Penyair)',
-  27: 'Az-Zumar (Golongan)',
-  28: 'Al-Gafir (Yang Maha Pengampun)',
-  29: 'Fussilat (Dijelaskan)',
-  30: 'As-Syura (Musyawarah)',
-  31: 'Az-Zukhruf (Perhiasan)',
-  32: 'Ad-Dukhan (Kabut)',
-  33: 'Al-Jasiyah (Yang Berlutut)',
-  34: 'Al-Ahqaf (Bukit Pasir)',
-  35: 'Muhammad (Nabi Muhammad)',
-  36: 'Al-Fath (Kemenangan)',
-  37: 'Al-Hujurat (Kamar-Kamar)',
-  38: 'Qaf (Qaf)',
-  39: 'Az-Zariyat (Angin yang Menyiarkan)',
-  40: 'At-Tur (Bukit Tursina)',
-  41: 'An-Najm (Bintang)',
-  42: 'Al-Qamar (Bulan)',
-  43: 'Ar-Rahman (Yang Maha Pemurah)',
-  44: 'Al-Waqiah (Hari Kiamat)',
-  45: 'Al-Hadid (Besi)',
-  46: 'Al-Mujadilah (Wanita yang Menggugat)',
-  47: 'Al-Hasyr (Pengusiran)',
-  48: 'Al-Mumtahanah (Wanita yang Diuji)',
-  49: 'As-Saf (Barisan)',
-  50: 'Al-Jumuah (Jumat)',
-  51: 'Al-Munafiqun (Orang-Orang Munafik)',
-  52: 'At-Tagabun (Pengungkapan Kesalahan)',
-  53: 'At-Talaq (Talak)',
-  54: 'At-Tahrim (Mengharamkan)',
-  55: 'Al-Mulk (Kerajaan)',
-  56: 'Al-Qalam (Pena)',
-  57: 'Al-Haqqah (Hari Kiamat)',
-  58: 'Al-Maarij (Tempat-Tempat Naik)',
-  59: 'Nuh (Nabi Nuh)',
-  60: 'Al-Jinn (Jin)',
-  61: 'Al-Muzzammil (Yang Berselimut)',
-  62: 'Al-Muddathir (Yang Berkemul)',
-  63: 'Al-Qiyamah (Hari Kiamat)',
-  64: 'Al-Insan (Manusia)',
-  65: 'Al-Mursalat (Malaikat-Malaikat yang Diutus)',
-  66: 'An-Naba (Berita Besar)',
-  67: 'An-Naziat (Malaikat-Malaikat yang Mencabut)',
-  68: 'Abasa (Bermuka Masam)',
-  69: 'At-Takwir (Melipat)',
-  70: 'Al-Infitar (Terbelah)',
-  71: 'Al-Mutaffifin (Orang-Orang yang Curang)',
-  72: 'Al-Inshiqaq (Terbelah)',
-  73: 'Al-Buruj (Bintang-Bintang)',
-  74: 'At-Tariq (Bintang Fajar)',
-  75: 'Al-Ala (Yang Paling Tinggi)',
-  76: 'Al-Ghashiyah (Hari Kiamat)',
-  77: 'Al-Fajr (Subuh)',
-  78: 'Al-Balad (Negeri)',
-  79: 'As-Shams (Matahari)',
-  80: 'Al-Layl (Malam)',
-  81: 'Ad-Duha (Duha)',
-  82: 'Ash-Sharh (Lapang Dada)',
-  83: 'At-Tin (Buah Tin)',
-  84: 'Al-Alaq (Segumpal Darah)',
-  85: 'Al-Qadr (Kemuliaan)',
-  86: 'Al-Bayyinah (Bukti)',
-  87: 'Az-Zalzalah (Guncangan)',
-  88: 'Al-Adiyat (Kuda Perang)',
-  89: 'Al-Qariah (Hari Kiamat)',
-  90: 'At-Takathur (Keinginan Berlebih)',
-  91: 'Al-Asr (Asar)',
-  92: 'Al-Humazah (Pengumpat)',
-  93: 'Al-Fil (Gajah)',
-  94: 'Quraysh (Quraisy)',
-  95: 'Al-Maun (Barang-barang yang Berguna)',
-  96: 'Al-Kauthar (Nikmat yang Berlimpah)',
-  97: 'Al-Kafirun (Orang-Orang Kafir)',
-  98: 'An-Nasr (Pertolongan)',
-  99: 'Al-Lahab (Api yang Menyala-nyala)',
-  100: 'Al-Ikhlas (Ikhlas)',
-  101: 'Al-Falaq (Subuh)',
-  102: 'An-Nas (Manusia)',
-};
-
 export default function ProfilPage() {
   const [stats, setStats] = useState<Stats>({ totalSuratDibaca: 0, totalHariAktif: 0, streak: 0 });
   const [lastRead, setLastRead] = useState<LastRead | null>(null);
+  const [surahList, setSurahList] = useState<any[]>([]);
   const [todayStatus, setTodayStatus] = useState<'done' | 'pending'>('pending');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -131,10 +28,14 @@ export default function ProfilPage() {
     refreshData();
   }, []);
 
-  const refreshData = () => {
+  const refreshData = async () => {
     setStats(getStats());
     setLastRead(getLastRead());
     setTodayStatus(getTodayStatus());
+
+    // Fetch surah list for names
+    const list = await getSurahList();
+    setSurahList(list);
   };
 
   const handleReset = () => {
@@ -148,7 +49,7 @@ export default function ProfilPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl p-6 mb-6 border border-gray-200">
           <div className="flex items-center gap-4 mb-6">
@@ -163,11 +64,10 @@ export default function ProfilPage() {
             </div>
           </div>
 
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-            todayStatus === 'done' 
-              ? 'bg-emerald-100 text-emerald-700' 
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${todayStatus === 'done'
+              ? 'bg-emerald-100 text-emerald-700'
               : 'bg-yellow-100 text-yellow-700'
-          }`}>
+            }`}>
             {todayStatus === 'done' ? (
               <>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,7 +114,9 @@ export default function ProfilPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-emerald-100 text-sm mb-1">Lanjut Baca</p>
-                  <p className="text-lg font-bold">{SURAH_NAMES[lastRead.surat] || `Surat ${lastRead.surat}`}</p>
+                  <p className="text-lg font-bold">
+                    {surahList.find(s => s.number === lastRead.surat)?.englishName || (surahList.length > 0 ? `Surat ${lastRead.surat}` : 'Loading...')}
+                  </p>
                   <p className="text-emerald-100 text-sm">Ayat {lastRead.ayat}</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -271,7 +173,7 @@ export default function ProfilPage() {
 
       {showResetConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
+          <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowResetConfirm(false)}
           />
