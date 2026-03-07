@@ -38,8 +38,8 @@ export default function AyatCard({ number, arab, transliteration, translation, n
       <div
         id={`ayat-${numberInSurah}`}
         className={`ayat-card rounded-xl p-6 border mb-4 relative transition-all duration-300 ${isLastRead
-            ? 'bg-emerald-50 border-emerald-300 shadow-md'
-            : 'bg-white border-gray-100 hover:border-emerald-200'
+          ? 'bg-emerald-50 border-emerald-300 shadow-md'
+          : 'bg-white border-gray-100 hover:border-emerald-200'
           }`}
       >
         {isLastRead && (
@@ -61,7 +61,7 @@ export default function AyatCard({ number, arab, transliteration, translation, n
             </span>
           </div>
           <div className="flex-1">
-            <p className="font-arabic text-2xl text-gray-900 text-right leading-loose mb-4" dir="rtl">
+            <p className="font-arabic text-4xl text-gray-900 text-right leading-loose mb-4" dir="rtl">
               {arab}
             </p>
             {transliteration && (

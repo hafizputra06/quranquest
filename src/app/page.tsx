@@ -59,7 +59,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
       <Header />
-      
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-2 animate-fade-in-up">
@@ -78,13 +78,13 @@ export default function Home() {
           </div>
           {ayatHarian && (
             <>
-              <p className="font-arabic text-3xl text-gray-900 text-right leading-loose mb-6" dir="rtl">
+              <p className="font-arabic text-4xl text-gray-900 text-right leading-loose mb-6" dir="rtl">
                 {ayatHarian.arab}
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
                 {ayatHarian.translation}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-m text-gray-500">
                 {ayatHarian.surah} ({ayatHarian.surahTranslation}) ayat {ayatHarian.ayat}
               </p>
             </>
@@ -112,9 +112,9 @@ export default function Home() {
                     Surat Pilihan
                   </span>
                 </div>
-                <p className="font-arabic text-xl text-gray-900 mb-1">{featuredSurah.name}</p>
-                <p className="text-gray-600 text-sm">{featuredSurah.englishName} ({featuredSurah.englishNameTranslation})</p>
-                <p className="text-gray-400 text-xs mt-2">{featuredSurah.numberOfAyahs} ayat</p>
+                <p className="font-arabic text-4xl text-gray-900 mb-2">{featuredSurah.name}</p>
+                <p className="text-gray-600 text-m">{featuredSurah.englishName} ({featuredSurah.englishNameTranslation})</p>
+                <p className="text-gray-400 text-m mt-2">{featuredSurah.numberOfAyahs} ayat</p>
               </div>
             </Link>
           )}
