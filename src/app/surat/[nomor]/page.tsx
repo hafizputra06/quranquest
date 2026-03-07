@@ -108,7 +108,7 @@ export default function SurahDetailPage({ params }: PageProps) {
             </span>
           </div>
           
-          <h1 className="font-arabic text-4xl text-gray-900 mb-2 text-center" dir="rtl">
+          <h1 className="font-arabic text-5xl md:text-6xl text-gray-900 mb-2 text-center" dir="rtl">
             {surah.name}
           </h1>
           <p className="text-xl font-bold text-gray-800 text-center">{surah.englishName} ({surah.englishNameTranslation})</p>
