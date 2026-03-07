@@ -125,12 +125,25 @@ export default function ProfilPage() {
   const [stats, setStats] = useState<Stats>({ totalSuratDibaca: 0, totalHariAktif: 0, streak: 0 });
   const [lastRead, setLastRead] = useState<LastRead | null>(null);
   const [todayStatus, setTodayStatus] = useState<'done' | 'pending'>('pending');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   useEffect(() => {
+    refreshData();
+  }, []);
+
+  const refreshData = () => {
     setStats(getStats());
     setLastRead(getLastRead());
     setTodayStatus(getTodayStatus());
-  }, []);
+  };
+
+  const handleReset = () => {
+    localStorage.removeItem('quranquest_last_read');
+    localStorage.removeItem('quranquest_daily_reads');
+    localStorage.removeItem('quranquest_stats');
+    refreshData();
+    setShowResetConfirm(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -187,6 +200,13 @@ export default function ProfilPage() {
             <div className="text-gray-500 text-sm">Hari Aktif</div>
           </div>
         </div>
+
+        <button
+          onClick={() => setShowResetConfirm(true)}
+          className="w-full mb-6 text-sm text-gray-400 hover:text-red-500 transition-colors"
+        >
+          Reset Progress
+        </button>
 
         {lastRead ? (
           <Link href={`/surat/${lastRead.surat}`}>
@@ -248,6 +268,42 @@ export default function ProfilPage() {
           </div>
         </div>
       </main>
+
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowResetConfirm(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Reset Progress?</h3>
+              <p className="text-gray-600 text-sm mb-6">
+                Semua data progress akan dihapus. Ini tidak bisa dibatalkan.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowResetConfirm(false)}
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-xl transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-xl transition-colors"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
