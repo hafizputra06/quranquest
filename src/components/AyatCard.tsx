@@ -45,7 +45,7 @@ export default function AyatCard({ number, arab, translation, numberInSurah, sur
         {isLastRead && (
           <div className="absolute -left-2 top-1/2 -translate-y-1/2">
             <div className="bg-emerald-500 text-white text-xs px-2 py-1 rounded-full shadow-md animate-pulse">
-              Last Read
+              Terakhir Baca
             </div>
           </div>
         )}
