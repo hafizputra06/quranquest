@@ -3,7 +3,7 @@
 import Header from '@/components/Header';
 import AyatCard from '@/components/AyatCard';
 import { getSurah } from '@/lib/quran-api';
-import { setLastRead, markTodayAsRead } from '@/lib/storage';
+import { setLastRead, markTodayAsRead, getLastRead } from '@/lib/storage';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ export default function SurahDetailPage({ params }: PageProps) {
   const [surahData, setSurahData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [surahNumber, setSurahNumber] = useState<number>(0);
+  const [lastReadAyat, setLastReadAyat] = useState<number>(1);
 
   useEffect(() => {
     const loadData = async () => {
@@ -30,7 +31,14 @@ export default function SurahDetailPage({ params }: PageProps) {
 
       const data = await getSurah(num);
       setSurahData(data);
-      setLastRead(num, 1);
+      
+      const lastRead = getLastRead();
+      if (lastRead && lastRead.surat === num) {
+        setLastReadAyat(lastRead.ayat);
+      } else {
+        setLastReadAyat(1);
+        setLastRead(num, 1);
+      }
       setLoading(false);
     };
 
@@ -71,6 +79,11 @@ export default function SurahDetailPage({ params }: PageProps) {
   const handleFinishReading = () => {
     markTodayAsRead(surahNumber);
     alert('Alhamdulillah! Surat telah selesai dibaca. Progress hari ini tercatat.');
+  };
+
+  const handleMarkPosition = (surahNum: number, ayat: number) => {
+    setLastRead(surahNum, ayat);
+    setLastReadAyat(ayat);
   };
 
   return (
@@ -117,6 +130,9 @@ export default function SurahDetailPage({ params }: PageProps) {
               arab={ayat.text}
               translation={ayat.translation}
               numberInSurah={ayat.numberInSurah}
+              surahNumber={surahNumber}
+              lastReadAyat={lastReadAyat}
+              onMarkPosition={handleMarkPosition}
             />
           ))}
         </div>
