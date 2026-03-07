@@ -38,8 +38,8 @@ export default function Header() {
       setActiveIndex(-1);
       return;
     }
-    // Normalize: lowercase, remove hyphens/extra spaces so "Al Fatihah" == "Al-Fatihah"
-    const normalize = (s: string) => s.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+    // Normalize: strip all hyphens, underscores, and spaces so "alfatihah" == "Al-Fatihah" == "Al Fatihah"
+    const normalize = (s: string) => s.toLowerCase().replace(/[-_\s]/g, '');
     const q = normalize(query);
     const filtered = allSurahs.filter(
       (s) =>
