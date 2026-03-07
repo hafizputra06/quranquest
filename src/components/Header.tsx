@@ -27,6 +27,7 @@ export default function Header() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     getSurahList().then((list) => setAllSurahs(list as Surah[]));
@@ -56,10 +57,10 @@ export default function Header() {
     setActiveIndex(-1);
   }, [query, allSurahs]);
 
-  // Close on outside click
+  // Close on outside click (check entire header so toggle button doesn't re-open)
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
         closeSearch();
       }
     };
@@ -95,7 +96,10 @@ export default function Header() {
   const showDropdown = searchOpen && query.trim().length > 0;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100"
+    >
       {/* Row 1: Logo + Nav + Search toggle button */}
       <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between gap-2">
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
