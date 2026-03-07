@@ -17,6 +17,7 @@ export default function SurahDetailPage({ params }: PageProps) {
   const [loading, setLoading] = useState(true);
   const [surahNumber, setSurahNumber] = useState<number>(0);
   const [lastReadAyat, setLastReadAyat] = useState<number>(1);
+  const [showFinishedModal, setShowFinishedModal] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -78,7 +79,7 @@ export default function SurahDetailPage({ params }: PageProps) {
 
   const handleFinishReading = () => {
     markTodayAsRead(surahNumber);
-    alert('Alhamdulillah! Surat telah selesai dibaca. Progress hari ini tercatat.');
+    setShowFinishedModal(true);
   };
 
   const handleMarkPosition = (surahNum: number, ayat: number) => {
@@ -166,6 +167,47 @@ export default function SurahDetailPage({ params }: PageProps) {
           )}
         </div>
       </main>
+
+      {showFinishedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowFinishedModal(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 transform animate-scale-in">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Alhamdulillah!</h3>
+              <p className="text-gray-600 mb-6">
+                Surat {surah.englishName} telah selesai dibaca.<br />
+                <span className="font-medium text-emerald-600">
+                  Progress hari ini tercatat.
+                </span>
+              </p>
+              <button
+                onClick={() => setShowFinishedModal(false)}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 px-8 rounded-xl transition-colors w-full"
+              >
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes scale-in {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
