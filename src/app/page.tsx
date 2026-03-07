@@ -152,7 +152,7 @@ export default function Home() {
       </main>
 
       <footer className="max-w-4xl mx-auto px-4 py-8 text-center text-gray-500 text-sm">
-        <p>QuranQuest &copy; {new Date().getFullYear()}</p>
+        <p>QuranQuest &copy; {new Date().getFullYear()} by <a href="https://hafizportfolio-eta.vercel.app/" target="_blank" rel="noopener noreferrer"><strong>Hafiz Rahadian Putra</strong></a></p>
         <p className="mt-1">Membaca Al-Quran adalah investasi terbaik untuk kehidupan</p>
       </footer>
     </div>
