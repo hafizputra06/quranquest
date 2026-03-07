@@ -62,6 +62,7 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  // Handle search results filtering
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -84,6 +85,32 @@ export default function Header() {
     setQuery('');
     setResults([]);
   };
+
+  // Close search on escape key or outside click
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (searchOpen && headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        closeSearch();
+      }
+    };
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeSearch();
+        setMenuOpen(false);
+      }
+    };
+
+    if (searchOpen || menuOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [searchOpen, menuOpen]);
 
   const selectSurah = (surah: Surah) => {
     closeSearch();
@@ -149,7 +176,10 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-2">
             <NavLinks />
             <button
-              onClick={() => setSearchOpen(!searchOpen)}
+              onClick={() => {
+                if (searchOpen) closeSearch();
+                else setSearchOpen(true);
+              }}
               className={`p-3.5 rounded-2xl shadow-sm ${searchOpen ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-50 text-gray-500'}`}
             >
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +189,10 @@ export default function Header() {
           </nav>
 
           <div className="flex md:hidden items-center gap-2">
-            <button onClick={() => setSearchOpen(!searchOpen)} className={`p-2.5 rounded-xl ${searchOpen ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-50 text-gray-500'}`}>
+            <button onClick={() => {
+              if (searchOpen) closeSearch();
+              else setSearchOpen(true);
+            }} className={`p-2.5 rounded-xl ${searchOpen ? 'bg-emerald-100 text-emerald-700' : 'text-gray-500 bg-gray-50'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </button>
             <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" className="p-2.5 rounded-xl bg-gray-50 text-gray-700">
