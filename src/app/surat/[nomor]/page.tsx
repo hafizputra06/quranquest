@@ -87,7 +87,7 @@ export default function SurahDetailPage({ params }: PageProps) {
               ← Kembali ke daftar
             </Link>
             <span className={`text-xs px-3 py-1 rounded-full ${
-              surah.revelationType === 'Meccan' 
+              surah.revelationType === 'Mekkah' 
                 ? 'bg-purple-100 text-purple-700' 
                 : 'bg-blue-100 text-blue-700'
             }`}>

@@ -29,7 +29,7 @@ export default function SurahCard({
             <p className="text-sm font-medium text-gray-700 truncate">{englishName} ({englishNameTranslation})</p>
             <div className="flex items-center gap-2 mt-2">
               <span className={`text-xs px-2 py-0.5 rounded-full ${
-                revelationType === 'Meccan' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'
+                revelationType === 'Mekkah' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'
               }`}>
                 {revelationType}
               </span>

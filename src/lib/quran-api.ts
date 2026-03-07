@@ -41,7 +41,7 @@ export async function getSurahList(): Promise<QuranSurah[]> {
       name: surah.name,
       englishName: surah.transliteration,
       englishNameTranslation: idData?.translation || surah.transliteration,
-      revelationType: surah.type === 'meccan' ? 'Meccan' : 'Medinan',
+      revelationType: surah.type === 'meccan' ? 'Mekkah' : 'Madinah',
       numberOfAyahs: surah.total_verses,
     };
   });
