@@ -103,8 +103,11 @@ export default function ProfilPage() {
 
         <button
           onClick={() => setShowResetConfirm(true)}
-          className="w-full mb-6 text-sm text-gray-400 hover:text-red-500 transition-colors"
+          className="w-full py-3 px-4 mb-6 bg-gray-100 hover:bg-red-50 border border-gray-200 hover:border-red-200 rounded-lg text-gray-500 hover:text-red-600 font-medium transition-colors flex items-center justify-center gap-2"
         >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
           Reset Progress
         </button>
 
@@ -146,26 +149,26 @@ export default function ProfilPage() {
           </Link>
         )}
 
-        <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
+<div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
           <h2 className="font-bold text-gray-900 mb-4">Cara Menggunakan</h2>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-emerald-700 text-sm font-bold">1</span>
               </div>
-              <p className="text-gray-600 text-sm">Pilih surat yang ingin dibaca dari halaman Daftar Surat</p>
+              <p className="text-gray-600 text-sm">Buka menu Surat dan pilih surat yang ingin dibaca</p>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-emerald-700 text-sm font-bold">2</span>
               </div>
-              <p className="text-gray-600 text-sm">Baca surat lengkap dengan terjemahan Indonesia</p>
+              <p className="text-gray-600 text-sm">Baca arab + transliterasi + terjemahan</p>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-emerald-700 text-sm font-bold">3</span>
               </div>
-              <p className="text-gray-600 text-sm">Status &quot;Sudah Baca&quot; akan otomatis tercatat setelah membaca</p>
+              <p className="text-gray-600 text-sm">Klik &quot;Tandai Selesai Dibaca&quot; di atas</p>
             </div>
           </div>
         </div>
