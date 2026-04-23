@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Amiri } from "next/font/google";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,6 +32,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );
