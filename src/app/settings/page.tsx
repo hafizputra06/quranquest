@@ -39,10 +39,10 @@ const TRANSLIT_COLOR_OPTIONS = [
 ];
 
 const ARAB_FONT_SIZES: Record<string, string> = {
-  sm: 'text-xl',
-  md: 'text-2xl',
-  lg: 'text-3xl',
-  xl: 'text-4xl',
+  sm: 'text-base sm:text-xl',
+  md: 'text-xl sm:text-2xl',
+  lg: 'text-2xl sm:text-3xl',
+  xl: 'text-3xl sm:text-4xl',
 };
 
 const TRANS_FONT_SIZES: Record<string, string> = {
@@ -87,18 +87,18 @@ export default function SettingsPage() {
         {/* Arabic Font Size */}
         <FadeIn delay={0.1} className="bg-white rounded-xl p-6 mb-4 border border-gray-100">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Ukuran Tulisan Arab</h2>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {ARAB_FONT_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => handleSave({ arabFontSize: opt.value as AppSettings['arabFontSize'] })}
-                className={`p-3 rounded-lg border-2 transition-all ${
+                className={`p-2 sm:p-3 rounded-lg border-2 transition-all truncate ${
                   settings.arabFontSize === opt.value
                     ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                     : 'border-gray-200 hover:border-emerald-200 text-gray-600'
                 }`}
               >
-                <div className="font-medium">{opt.label}</div>
+                <div className="text-xs sm:text-sm font-medium truncate w-full">{opt.label}</div>
                 <div className="text-xs text-gray-400">{opt.size}</div>
               </button>
             ))}
@@ -113,13 +113,13 @@ export default function SettingsPage() {
               <button
                 key={opt.value}
                 onClick={() => handleSave({ transFontSize: opt.value as AppSettings['transFontSize'] })}
-                className={`p-3 rounded-lg border-2 transition-all ${
+                className={`p-2 sm:p-3 rounded-lg border-2 transition-all truncate ${
                   settings.transFontSize === opt.value
                     ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                     : 'border-gray-200 hover:border-emerald-200 text-gray-600'
                 }`}
               >
-                <div className="font-medium">{opt.label}</div>
+                <div className="text-sm font-medium truncate w-full">{opt.label}</div>
                 <div className="text-xs text-gray-400">{opt.size}</div>
               </button>
             ))}
@@ -134,13 +134,13 @@ export default function SettingsPage() {
               <button
                 key={opt.value}
                 onClick={() => handleSave({ transliterationFontSize: opt.value as AppSettings['transliterationFontSize'] })}
-                className={`p-3 rounded-lg border-2 transition-all ${
+                className={`p-2 sm:p-3 rounded-lg border-2 transition-all truncate ${
                   settings.transliterationFontSize === opt.value
                     ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
                     : 'border-gray-200 hover:border-emerald-200 text-gray-600'
                 }`}
               >
-                <div className="font-medium">{opt.label}</div>
+                <div className="text-sm font-medium truncate w-full">{opt.label}</div>
                 <div className="text-xs text-gray-400">{opt.size}</div>
               </button>
             ))}
@@ -150,18 +150,18 @@ export default function SettingsPage() {
         {/* Transliteration Color */}
         <FadeIn delay={0.3} className="bg-white rounded-xl p-6 mb-4 border border-gray-100">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Warna Transliterasi</h2>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {TRANSLIT_COLOR_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => handleSave({ transliterationColor: opt.value as AppSettings['transliterationColor'] })}
-                className={`p-3 rounded-lg border-2 transition-all ${
+                className={`p-2 sm:p-3 rounded-lg border-2 transition-all truncate ${
                   settings.transliterationColor === opt.value
                     ? 'border-emerald-500 bg-emerald-50'
                     : 'border-gray-200 hover:border-emerald-200'
                 }`}
               >
-                <div className={`font-medium ${opt.color}`}>{opt.label}</div>
+                <div className={`text-sm font-medium truncate w-full ${opt.color}`}>{opt.label}</div>
                 <div className="text-xs text-gray-400">warna</div>
               </button>
             ))}
