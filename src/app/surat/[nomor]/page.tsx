@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import AyatCard from '@/components/AyatCard';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { getSurah } from '@/lib/quran-api';
-import { setLastRead, markTodayAsRead, getLastRead } from '@/lib/storage';
+import { setLastRead, markTodayAsRead, getLastRead, getSettings } from '@/lib/storage';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ export default function SurahDetailPage({ params }: PageProps) {
   const [surahNumber, setSurahNumber] = useState<number>(0);
   const [lastReadAyat, setLastReadAyat] = useState<number>(1);
   const [showFinishedModal, setShowFinishedModal] = useState(false);
+  const [settings, setSettings] = useState<{ arabFontSize: 'sm' | 'md' | 'lg' | 'xl'; transFontSize: 'sm' | 'md' | 'lg'; transliterationFontSize: 'sm' | 'md' | 'lg'; transliterationColor: 'green' | 'blue' | 'purple' | 'gray' }>({ arabFontSize: 'md', transFontSize: 'md', transliterationFontSize: 'md', transliterationColor: 'green' });
 
   useEffect(() => {
     const loadData = async () => {
@@ -41,6 +42,8 @@ export default function SurahDetailPage({ params }: PageProps) {
         setLastReadAyat(1);
         setLastRead(num, 1);
       }
+      
+      setSettings(getSettings());
       setLoading(false);
     };
 
@@ -109,7 +112,7 @@ export default function SurahDetailPage({ params }: PageProps) {
             </span>
           </div>
 
-          <h1 className="font-arabic text-5xl md:text-6xl text-gray-900 mb-2 text-center" dir="rtl">
+          <h1 className="font-arabic text-4xl md:text-6xl text-gray-900 mb-2 text-center" dir="rtl">
             {surah.name}
           </h1>
           <p className="text-xl font-bold text-gray-800 text-center">{surah.englishName} ({surah.englishNameTranslation})</p>
@@ -136,6 +139,10 @@ export default function SurahDetailPage({ params }: PageProps) {
                 surahName={surah.englishName}
                 lastReadAyat={lastReadAyat}
                 onMarkPosition={handleMarkPosition}
+                arabFontSize={settings.arabFontSize}
+                transFontSize={settings.transFontSize}
+                transliterationFontSize={settings.transliterationFontSize}
+                transliterationColor={settings.transliterationColor}
               />
             </StaggerItem>
           ))}

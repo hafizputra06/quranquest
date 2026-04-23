@@ -3,7 +3,7 @@
 import Header from '@/components/Header';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/FadeIn';
 import { getRandomAyat, getSurahList, getSurah } from '@/lib/quran-api';
-import { getTodayStatus, getLastRead } from '@/lib/storage';
+import { getTodayStatus, getLastRead, getSettings } from '@/lib/storage';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -16,22 +16,38 @@ interface Surah {
   numberOfAyahs: number;
 }
 
+const ARAB_FONT_SIZES = {
+  sm: 'text-xl sm:text-2xl',
+  md: 'text-2xl sm:text-3xl',
+  lg: 'text-3xl sm:text-4xl',
+  xl: 'text-4xl sm:text-5xl',
+};
+
+const TRANS_FONT_SIZES = {
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+};
+
 export default function Home() {
   const [ayatHarian, setAyatHarian] = useState<{ arab: string; translation: string; surah: string; surahTranslation: string; ayat: number } | null>(null);
   const [featuredSurah, setFeaturedSurah] = useState<Surah | null>(null);
   const [todayStatus, setTodayStatus] = useState<'done' | 'pending'>('pending');
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState({ arabFontSize: 'md', transFontSize: 'md' });
 
   useEffect(() => {
     const loadData = async () => {
-      const [ayat, surahList, status] = await Promise.all([
+      const [ayat, surahList, status, sett] = await Promise.all([
         getRandomAyat(),
         getSurahList(),
         getTodayStatus(),
+        getSettings(),
       ]);
 
       setAyatHarian(ayat);
       setTodayStatus(status);
+      setSettings(sett);
 
       const today = new Date();
       const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
@@ -75,7 +91,7 @@ export default function Home() {
           </FadeIn>
         </div>
 
-        <FadeIn delay={0.2} className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-emerald-100">
+        <FadeIn delay={0.2} className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 mb-8 border border-emerald-100">
           <div className="flex items-center gap-2 mb-4">
             <span className="bg-emerald-100 text-emerald-700 text-xs font-medium px-3 py-1 rounded-full">
               Ayat Hari Ini
@@ -83,13 +99,13 @@ export default function Home() {
           </div>
           {ayatHarian && (
             <>
-              <p className="font-arabic text-4xl text-gray-900 text-right leading-loose mb-6" dir="rtl">
+              <p className={`font-arabic ${ARAB_FONT_SIZES[settings.arabFontSize as keyof typeof ARAB_FONT_SIZES]} text-gray-900 text-right mb-4 sm:mb-6`} dir="rtl" style={{ lineHeight: '2.2' }}>
                 {ayatHarian.arab}
               </p>
-              <p className="text-gray-600 leading-relaxed mb-4">
+              <p className={`text-gray-600 ${TRANS_FONT_SIZES[settings.transFontSize as keyof typeof TRANS_FONT_SIZES]} leading-relaxed mb-4`}>
                 {ayatHarian.translation}
               </p>
-              <p className="text-m text-gray-500">
+              <p className="text-sm text-gray-500">
                 {ayatHarian.surah} ({ayatHarian.surahTranslation}) ayat {ayatHarian.ayat}
               </p>
             </>
@@ -120,7 +136,7 @@ export default function Home() {
                       Surat Pilihan
                     </span>
                   </div>
-                  <p className="font-arabic text-4xl text-gray-900 mb-2">{featuredSurah.name}</p>
+                  <p className="font-arabic text-3xl sm:text-4xl text-gray-900 mb-2">{featuredSurah.name}</p>
                   <p className="text-gray-600 text-m">{featuredSurah.englishName} ({featuredSurah.englishNameTranslation})</p>
                   <p className="text-gray-400 text-m mt-2">{featuredSurah.numberOfAyahs} ayat</p>
                 </div>

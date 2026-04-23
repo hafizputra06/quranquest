@@ -12,9 +12,53 @@ interface AyatCardProps {
   surahName: string;
   lastReadAyat: number;
   onMarkPosition: (surah: number, ayat: number) => void;
+  arabFontSize?: 'sm' | 'md' | 'lg' | 'xl';
+  transFontSize?: 'sm' | 'md' | 'lg';
+  transliterationFontSize?: 'sm' | 'md' | 'lg';
+  transliterationColor?: 'green' | 'blue' | 'purple' | 'gray';
 }
 
-export default function AyatCard({ number, arab, transliteration, translation, numberInSurah, surahNumber, surahName, lastReadAyat, onMarkPosition }: AyatCardProps) {
+const ARAB_FONT_SIZES = {
+  sm: 'text-xl sm:text-2xl',
+  md: 'text-2xl sm:text-3xl',
+  lg: 'text-3xl sm:text-4xl',
+  xl: 'text-4xl sm:text-5xl',
+};
+
+const TRANS_FONT_SIZES = {
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+};
+
+const TRANSLIT_FONT_SIZES = {
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+};
+
+const TRANSLIT_COLORS = {
+  green: 'text-emerald-600',
+  blue: 'text-blue-600',
+  purple: 'text-purple-600',
+  gray: 'text-gray-500',
+};
+
+export default function AyatCard({ 
+  number, 
+  arab, 
+  transliteration, 
+  translation, 
+  numberInSurah, 
+  surahNumber, 
+  surahName, 
+  lastReadAyat, 
+  onMarkPosition,
+  arabFontSize = 'md',
+  transFontSize = 'md',
+  transliterationFontSize = 'md',
+  transliterationColor = 'green',
+}: AyatCardProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const isLastRead = lastReadAyat === numberInSurah;
@@ -38,7 +82,7 @@ export default function AyatCard({ number, arab, transliteration, translation, n
     <>
       <div
         id={`ayat-${numberInSurah}`}
-        className={`ayat-card rounded-xl p-6 border mb-4 relative transition-all duration-300 ${isLastRead
+        className={`ayat-card rounded-xl p-4 sm:p-6 border mb-4 relative transition-all duration-300 ${isLastRead
           ? 'bg-emerald-50 border-emerald-300 shadow-md'
           : 'bg-white border-gray-100 hover:border-emerald-200'
           }`}
@@ -62,15 +106,15 @@ export default function AyatCard({ number, arab, transliteration, translation, n
             </span>
           </div>
           <div className="flex-1">
-            <p className="font-arabic text-4xl text-gray-900 text-right leading-loose mb-4" dir="rtl">
+            <p className={`ayat-arabic ${ARAB_FONT_SIZES[arabFontSize]} text-gray-900 text-right leading-relaxed mb-3 sm:mb-4`} dir="rtl">
               {arab}
             </p>
             {transliteration && (
-              <p className="text-emerald-600 font-medium italic mb-2">
+              <p className={`${TRANSLIT_COLORS[transliterationColor]} ${TRANSLIT_FONT_SIZES[transliterationFontSize]} font-medium italic mb-2`}>
                 {transliteration}
               </p>
             )}
-            <p className="text-gray-600 leading-relaxed">
+            <p className={`${TRANS_FONT_SIZES[transFontSize]} text-gray-600 leading-relaxed`}>
               {translation.split(/(\d+\))/g).map((part, i) => {
                 if (/^\d+\)$/.test(part)) {
                   return (

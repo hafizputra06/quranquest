@@ -44,7 +44,7 @@ export default function SurahCard({
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-arabic text-4xl text-gray-900 mb-1">{name}</h3>
+            <h3 className="font-arabic text-3xl sm:text-4xl text-gray-900 mb-1">{name}</h3>
             <p className="text-base font-medium text-gray-700 truncate">{englishName} ({englishNameTranslation})</p>
             <div className="flex items-center gap-2 mt-2">
               <span className={`text-base px-2 py-0.5 rounded-full ${revelationType === 'Makkiyah' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700'

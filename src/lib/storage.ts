@@ -16,10 +16,25 @@ export interface UserStats {
   streak: number;
 }
 
+export interface AppSettings {
+  arabFontSize: 'sm' | 'md' | 'lg' | 'xl';
+  transFontSize: 'sm' | 'md' | 'lg';
+  transliterationFontSize: 'sm' | 'md' | 'lg';
+  transliterationColor: 'green' | 'blue' | 'purple' | 'gray';
+}
+
+export const DEFAULT_SETTINGS: AppSettings = {
+  arabFontSize: 'md',
+  transFontSize: 'md',
+  transliterationFontSize: 'md',
+  transliterationColor: 'green',
+};
+
 const STORAGE_KEYS = {
   LAST_READ: 'quranquest_last_read',
   DAILY_READS: 'quranquest_daily_reads',
   STATS: 'quranquest_stats',
+  SETTINGS: 'quranquest_settings',
 };
 
 export function getLastRead(): ReadingProgress | null {
@@ -93,4 +108,17 @@ export function getStats(): UserStats {
 export function getTodayStatus(): 'done' | 'pending' {
   const todayRead = getTodayRead();
   return todayRead?.status || 'pending';
+}
+
+export function getSettings(): AppSettings {
+  if (typeof window === 'undefined') return DEFAULT_SETTINGS;
+  const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+  return data ? JSON.parse(data) : DEFAULT_SETTINGS;
+}
+
+export function saveSettings(settings: Partial<AppSettings>): void {
+  if (typeof window === 'undefined') return;
+  const current = getSettings();
+  const updated = { ...current, ...settings };
+  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(updated));
 }
