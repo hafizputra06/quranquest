@@ -12,6 +12,7 @@ interface AyatCardProps {
   surahName: string;
   lastReadAyat: number;
   onMarkPosition: (surah: number, ayat: number) => void;
+  onMarkTodayRead?: (surah: number) => void;
   arabFontSize?: 'sm' | 'md' | 'lg' | 'xl';
   transFontSize?: 'sm' | 'md' | 'lg';
   transliterationFontSize?: 'sm' | 'md' | 'lg';
@@ -54,6 +55,7 @@ export default function AyatCard({
   surahName, 
   lastReadAyat, 
   onMarkPosition,
+  onMarkTodayRead,
   arabFontSize = 'md',
   transFontSize = 'md',
   transliterationFontSize = 'md',
@@ -74,6 +76,7 @@ export default function AyatCard({
 
   const handleMark = () => {
     onMarkPosition(surahNumber, numberInSurah);
+    onMarkTodayRead?.(surahNumber);
     setShowPopup(false);
     setShowModal(true);
   };

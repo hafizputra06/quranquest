@@ -91,6 +91,10 @@ export default function SurahDetailPage({ params }: PageProps) {
     setLastReadAyat(ayat);
   };
 
+  const handleMarkTodayRead = (surahNum: number) => {
+    markTodayAsRead(surahNum);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -139,6 +143,7 @@ export default function SurahDetailPage({ params }: PageProps) {
                 surahName={surah.englishName}
                 lastReadAyat={lastReadAyat}
                 onMarkPosition={handleMarkPosition}
+                onMarkTodayRead={handleMarkTodayRead}
                 arabFontSize={settings.arabFontSize}
                 transFontSize={settings.transFontSize}
                 transliterationFontSize={settings.transliterationFontSize}
