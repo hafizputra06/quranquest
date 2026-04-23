@@ -65,8 +65,8 @@ export default function ProfilPage() {
           </div>
 
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${todayStatus === 'done'
-              ? 'bg-emerald-100 text-emerald-700'
-              : 'bg-yellow-100 text-yellow-700'
+            ? 'bg-emerald-100 text-emerald-700'
+            : 'bg-yellow-100 text-yellow-700'
             }`}>
             {todayStatus === 'done' ? (
               <>
@@ -149,7 +149,7 @@ export default function ProfilPage() {
           </Link>
         )}
 
-<div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
+        <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
           <h2 className="font-bold text-gray-900 mb-4">Cara Menggunakan</h2>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
@@ -162,13 +162,13 @@ export default function ProfilPage() {
               <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-emerald-700 text-sm font-bold">2</span>
               </div>
-              <p className="text-gray-600 text-sm">Baca arab + transliterasi + terjemahan</p>
+              <p className="text-gray-600 text-sm">Baca Surat dan terjemahan</p>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-emerald-700 text-sm font-bold">3</span>
               </div>
-              <p className="text-gray-600 text-sm">Klik &quot;Tandai Selesai Dibaca&quot; di atas</p>
+              <p className="text-gray-600 text-sm">Klik &quot;Tandai Selesai Dibaca&quot; di atas atau klik pada ayat dan pilih tandai disini</p>
             </div>
           </div>
         </div>

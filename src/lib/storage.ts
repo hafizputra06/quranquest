@@ -68,21 +68,27 @@ export function markTodayAsRead(surat: number): void {
   const today = new Date().toISOString().split('T')[0];
   const reads = getDailyReads();
   
+  const existingToday = reads[today];
+  const previousSurat = existingToday?.surat;
+  
   reads[today] = { date: today, status: 'done', surat };
   localStorage.setItem(STORAGE_KEYS.DAILY_READS, JSON.stringify(reads));
   
-  updateStatsOnRead();
+  updateStatsOnRead(previousSurat, surat);
 }
 
-function updateStatsOnRead(): void {
+function updateStatsOnRead(previousSurat?: number, currentSurat?: number): void {
   const stats = getStats();
-  stats.totalSuratDibaca += 1;
   
   const today = new Date().toISOString().split('T')[0];
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
   
   const reads = getDailyReads();
   const readDates = Object.keys(reads).sort().reverse();
+  
+  if (previousSurat !== currentSurat) {
+    stats.totalSuratDibaca += 1;
+  }
   
   let currentStreak = 0;
   let checkDate = today;
